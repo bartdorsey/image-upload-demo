@@ -61,8 +61,8 @@ def get_url(photo_name: str) -> str | None:
 
 def upload_photo(image: UploadFile) -> str | None:
     """
-    Uploads a user's avatar image to an S3 bucket and returns
-    the url
+    Uploads an image to an S3 bucket and returns
+    the filename
     """
     # Create a unique filename, based on the filename we get
     # Plus a uuid (Universal Unique ID)
