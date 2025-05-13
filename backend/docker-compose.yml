@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: photos
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./data:/data
+    ports:
+      - "5432:5432"
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    environment:
+      - MINIO_ROOT_USER=root
+      - MINIO_ROOT_PASSWORD=password
+    command: server --console-address 0.0.0.0:9001 /data
+
+volumes:
+  postgres_data:
+    external: false
+  minio_data:
+    external: false
