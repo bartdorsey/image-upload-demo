@@ -1,8 +1,9 @@
-import { NavLink } from 'react-router'
-import './App.css'
-import SimpleUploadForm from './SimpleUploadForm'
-import { Routes, Route } from 'react-router'
-import PhotoList from './PhotoList'
+import { NavLink } from "react-router";
+import "./App.css";
+import SimpleUploadForm from "./SimpleUploadForm";
+import { Routes, Route } from "react-router";
+import PhotoList from "./PhotoList";
+import UploadForm from "./UploadForm";
 
 function App() {
     return (
@@ -30,9 +31,13 @@ function App() {
                         path="/simple-upload"
                         element={<SimpleUploadForm />}
                     />
+                    <Route
+                        path="/drag-and-drop-upload"
+                        element={<UploadForm />}
+                    />
                 </Routes>
             </main>
         </div>
-    )
+    );
 }
-export default App
+export default App;

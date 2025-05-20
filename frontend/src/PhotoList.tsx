@@ -1,36 +1,36 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 
-const baseUrl = 'http://localhost:8000'
+const baseUrl = "http://localhost:8000";
 
 type PhotoResponse = {
-    id: number
-    photo_url: string
-}
+    id: number;
+    photo_url: string;
+};
 
 export default function PhotoList() {
-    const [error, setError] = useState('')
-    const [photos, setPhotos] = useState<PhotoResponse[]>([])
+    const [error, setError] = useState("");
+    const [photos, setPhotos] = useState<PhotoResponse[]>([]);
 
     useEffect(() => {
         async function getPhotos() {
             try {
-                const response = await fetch(`${baseUrl}/api/photos`)
+                const response = await fetch(`${baseUrl}/api/photos`);
                 if (!response.ok) {
-                    console.log(response)
-                    throw new Error("Couldn't fetch images")
+                    console.log(response);
+                    throw new Error("Couldn't fetch images");
                 }
-                const photos = (await response.json()) as PhotoResponse[]
-                setPhotos(photos)
+                const photos = (await response.json()) as PhotoResponse[];
+                setPhotos(photos);
             } catch (e) {
                 if (e instanceof Error) {
-                    setError(e.message)
+                    setError(e.message);
                 } else {
-                    setError('Unknown Error')
+                    setError("Unknown Error");
                 }
             }
         }
-        getPhotos()
-    }, [])
+        getPhotos();
+    }, []);
 
     return (
         <div className="flex gap-2 flex-wrap justify-center">
@@ -43,5 +43,5 @@ export default function PhotoList() {
                 />
             ))}
         </div>
-    )
+    );
 }
