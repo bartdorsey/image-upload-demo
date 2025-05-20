@@ -24,7 +24,7 @@ def get_photos() -> Sequence[DBPhoto]:
 
 
 def add_photo(photo_name: str) -> DBPhoto:
-    """Add a single photo's name to the datbase."""
+    """Add a single photo's name to the database."""
     with SessionLocal() as session:
         new_photo = DBPhoto(photo_name=photo_name)
         session.add(new_photo)

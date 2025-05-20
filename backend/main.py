@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict
 
 import db
-from photos import upload_photo
+from photos import upload_photo, get_url
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -41,9 +41,12 @@ app.add_middleware(
 
 
 @app.get("/api/photos", response_model=list[PhotoResponse])
-def get_photos_endpoint() -> Sequence[DBPhoto]:
+def get_photos_endpoint() -> list[PhotoResponse]:
     """Return all photos from the database."""
-    return db.get_photos()
+    return [
+        PhotoResponse(id=photo.id, photo_url=get_url(photo.photo_name))
+        for photo in db.get_photos()
+    ]
 
 
 @app.post("/api/photos", response_model=PhotoResponse)
