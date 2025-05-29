@@ -1,13 +1,12 @@
 services:
   postgres:
     image: postgres:16
-    container_name: postgres_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: photos
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_photo_data:/var/lib/postgresql/data
       - ./data:/data
     ports:
       - "5432:5432"
@@ -25,7 +24,7 @@ services:
     command: server --console-address 0.0.0.0:9001 /data
 
 volumes:
-  postgres_data:
+  postgres_photo_data:
     external: false
   minio_data:
     external: false
