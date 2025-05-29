@@ -2,47 +2,26 @@
 
 from __future__ import annotations
 
-import os
-
 # This is used so we can have a unique filename for every image file
 import uuid
 from typing import TYPE_CHECKING
 
 # Boto 3 is the library that you can use to talk to S3 compatible APIs
 import boto3
-import dotenv
 from botocore.exceptions import ClientError
+
+# Import from our centralized config module
+from config import (
+    AWS_ACCESS_KEY,
+    AWS_SECRET_KEY,
+    S3_ENDPOINT_URL,
+    BUCKET_NAME,
+)
 
 if TYPE_CHECKING:
     from fastapi import UploadFile
 
-success = dotenv.load_dotenv()
-if not success:
-    msg = "Couldn't read .env file"
-    raise ValueError(msg)
-
-# Setup S3 access
-
-# Start by checking environment variables containing our keys
-# You get these by visiting http://localhost:9000 and logging
-# in and creating new access keys
-# Then put them into the .env file
-AWS_ACCESS_KEY = os.environ.get("AWS_ACCESS_KEY")
-AWS_SECRET_KEY = os.environ.get("AWS_SECRET_KEY")
-
-if AWS_ACCESS_KEY is None or AWS_SECRET_KEY is None:
-    msg = "AWS_ACCESS_KEY and AWS_SECRET_KEY must be defined."
-    raise ValueError(msg)
-
-# You can put these urls into your .env if you want to run this in production
-S3_PUBLIC_URL = os.environ.get("S3_PUBLIC_URL", "http://localhost:9000")
-S3_ENDPOINT_URL = os.environ.get("S3_ENDPOINT_URL", "http://localhost:9000")
-
-# Set a bucket name for our photos to be stored
-BUCKET_NAME = "photos"
-
 # Create the boto3 client
-
 s3 = boto3.client(
     "s3",
     endpoint_url=S3_ENDPOINT_URL,
@@ -50,6 +29,51 @@ s3 = boto3.client(
     aws_secret_access_key=AWS_SECRET_KEY,
     region_name="us-east-1",
 )
+
+# Constants for validation
+MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024  # 5 MB max size
+ALLOWED_IMAGE_TYPES = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+]
+
+
+def validate_image(image: UploadFile) -> bool:
+    """
+    Validate the image file before uploading.
+
+    Returns:
+        bool: True if valid, False otherwise
+    """
+    # Check file type (content_type)
+    if image.content_type not in ALLOWED_IMAGE_TYPES:
+        error_message = (
+            f"Unsupported file type: {image.content_type}. "
+            f"Allowed types: {', '.join(ALLOWED_IMAGE_TYPES)}"
+        )
+        print(f"Image validation failed: {error_message}")  # noqa: T201
+        return False
+
+    # Check file size
+    # First store current position
+    current_position = image.file.tell()
+
+    # Move to end to get size
+    image.file.seek(0, 2)
+    size = image.file.tell()
+
+    # Return to original position
+    image.file.seek(current_position)
+
+    if size > MAX_IMAGE_SIZE_BYTES:
+        max_mb = MAX_IMAGE_SIZE_BYTES / (1024 * 1024)
+        error_msg = f"File too large: {size} bytes. Max size: {max_mb} MB"
+        print(f"Image validation failed: {error_msg}")  # noqa: T201
+        return False
+
+    return True
 
 
 # The way AWS S3 works is, you get temporary pre-signed URLs to items
@@ -69,6 +93,10 @@ def get_url(photo_name: str) -> str | None:
 
 def upload_photo(image: UploadFile) -> str | None:
     """Upload an image to an S3 bucket and return the filename."""
+    # Validate the image before proceeding
+    if not validate_image(image):
+        return None
+
     # Create a unique filename, based on the filename we get
     # Plus a uuid (Universal Unique ID)
     # Keeps users from overwriting each other's files

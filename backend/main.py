@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar
+# Import config early to ensure environment variables are loaded first
+import config  # noqa: F401
+from config import CORS_ORIGINS
+
+from typing import ClassVar
 
 from fastapi import FastAPI, UploadFile
 from fastapi.exceptions import HTTPException
@@ -12,14 +16,8 @@ from pydantic import BaseModel, ConfigDict
 import db
 from photos import upload_photo, get_url
 
-if TYPE_CHECKING:
-    from collections.abc import Sequence
-
-    from db_models import DBPhoto
 
 app = FastAPI()
-
-origins = ["http://localhost:5173"]
 
 
 class PhotoResponse(BaseModel):
@@ -33,7 +31,7 @@ class PhotoResponse(BaseModel):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -50,9 +48,12 @@ def get_photos_endpoint() -> list[PhotoResponse]:
 
 
 @app.post("/api/photos", response_model=PhotoResponse)
-def upload_photo_endpoint(photo: UploadFile) -> DBPhoto:
+def upload_photo_endpoint(photo: UploadFile) -> PhotoResponse:
     """Upload a photo and save it to the database."""
     photo_name = upload_photo(photo)
     if photo_name is None:
         raise HTTPException(status_code=400, detail="Photo upload failed")
-    return db.add_photo(photo_name)
+    db_photo = db.add_photo(photo_name)
+    return PhotoResponse(
+        id=db_photo.id, photo_url=get_url(db_photo.photo_name)
+    )

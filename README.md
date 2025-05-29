@@ -28,22 +28,15 @@ docker compose exec postgres psql -U postgres photos
 psql# \i data/photos.sql
 ```
 
-Login to the minio web interface with u: root p: password.
+Login to the minio web interface with u: minioadmin p: minioadmin
 
-http://localhost:9000
+http://localhost:9001
 
 Create a new bucket named "photos"
-Create a new set of credentials.
 
-Using these credentials, set the following Environment variables inside a
-new `.env` file in the backend folder, and put your new keys into it
+Copy the .env.sample file to .env in the backend folder
 
-.env file:
-
-```shell
-AWS_ACCESS_KEY=GgwmZwIgnh7UKpgq7THM
-AWS_SECRET_KEY=CLBFoQTAbwRVWzSfl3CGRkE22IXGfd0bnmwz8E9g
-```
+`cp .env.sample .env`
 
 Finally create a new virtual environment, pip install, and start up FastAPI.
 
@@ -65,5 +58,3 @@ Inside the frontend folder:
 `npm run dev`
 
 Visit http://localhost:5173
-
-

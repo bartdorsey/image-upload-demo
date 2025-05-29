@@ -1,13 +1,12 @@
 """Database routines."""
 
 from collections.abc import Sequence
-
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
-
 from db_models import Base, DBPhoto
 
-DATABASE_URL = "postgresql+psycopg://postgres:postgres@localhost:5432/photos"
+# Import from our centralized config module
+from config import DATABASE_URL
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
