@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
-const baseUrl = "http://localhost:8000";
+// Get API URL from environment variables, with fallback for local development
+const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 type PhotoResponse = {
     id: number;

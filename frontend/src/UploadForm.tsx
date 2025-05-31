@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
 
-const baseURL = "http://localhost:8000";
+// Get API URL from environment variables, with fallback for local development
+const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 export default function UploadForm() {
     const [error, setError] = useState("");
