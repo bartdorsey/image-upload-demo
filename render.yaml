@@ -1,0 +1,38 @@
+services:
+  # Backend API service
+  - type: web
+    name: image-upload-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: image-upload-db
+          property: connectionString
+      - key: AWS_ACCESS_KEY
+        sync: false
+      - key: AWS_SECRET_KEY
+        sync: false
+      - key: S3_ENDPOINT_URL
+        value: https://s3.amazonaws.com
+      - key: CORS_ORIGINS
+        value: https://image-upload-demo.onrender.com
+
+  # Frontend static site
+  - type: web
+    name: image-upload-frontend
+    runtime: static
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://image-upload-api.onrender.com
+
+databases:
+  - name: image-upload-db
+    plan: free
