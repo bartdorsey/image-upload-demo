@@ -16,6 +16,7 @@ from config import (
     AWS_SECRET_KEY,
     S3_ENDPOINT_URL,
     BUCKET_NAME,
+    REGION_NAME,
 )
 
 if TYPE_CHECKING:
@@ -27,7 +28,7 @@ s3 = boto3.client(
     endpoint_url=S3_ENDPOINT_URL,
     aws_access_key_id=AWS_ACCESS_KEY,
     aws_secret_access_key=AWS_SECRET_KEY,
-    region_name="us-east-1",
+    region_name=REGION_NAME,
 )
 
 # Constants for validation
