@@ -21,7 +21,7 @@ AWS_ACCESS_KEY = os.environ.get("AWS_ACCESS_KEY")
 AWS_SECRET_KEY = os.environ.get("AWS_SECRET_KEY")
 S3_PUBLIC_URL = os.environ.get("S3_PUBLIC_URL", "http://localhost:9000")
 S3_ENDPOINT_URL = os.environ.get("S3_ENDPOINT_URL", "http://localhost:9000")
-BUCKET_NAME = "photos"
+BUCKET_NAME = os.environ.get("BUCKET_NAME", "photos")
 
 # Check that we have the required AWS credentials
 if AWS_ACCESS_KEY is None or AWS_SECRET_KEY is None:
