@@ -108,7 +108,7 @@ After completing this tutorial, you'll understand:
 ```mermaid
 graph LR
     subgraph Frontend["React Frontend"]
-        A["• Upload Forms<br/>• Photo Gallery<br/>• Type Safety"]
+        A["• Upload Forms<br/>• Photo Gallery"]
     end
 
     subgraph Backend["FastAPI Backend"]
