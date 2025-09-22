@@ -74,6 +74,26 @@ export default function SimpleUploadForm() {
 
                     <div className="space-y-4">
                         <label className="block">
+                            <span className="text-gray-700 font-medium mb-2 block">Title (optional)</span>
+                            <input
+                                className="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                type="text"
+                                name="title"
+                                placeholder="Enter a title for your photo"
+                            />
+                        </label>
+
+                        <label className="block">
+                            <span className="text-gray-700 font-medium mb-2 block">Description (optional)</span>
+                            <textarea
+                                className="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+                                name="description"
+                                rows={3}
+                                placeholder="Describe your photo"
+                            />
+                        </label>
+
+                        <label className="block">
                             <span className="text-gray-700 font-medium mb-2 block">Choose Photo</span>
                             <input
                                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white file:font-medium hover:file:bg-blue-700 file:cursor-pointer cursor-pointer border border-gray-300 rounded-lg p-3 hover:border-blue-400 transition-colors"

@@ -57,8 +57,8 @@ export default function FullsizeImage() {
 
     return (
         <div className="max-w-5xl mx-auto">
-            {/* Header with back button and photo info */}
-            <div className="flex justify-between items-center mb-6">
+            {/* Header with back button */}
+            <div className="mb-6">
                 <button
                     onClick={() => navigate("/")}
                     className="flex items-center gap-2 bg-white text-gray-700 px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors shadow-sm"
@@ -68,9 +68,6 @@ export default function FullsizeImage() {
                     </svg>
                     Back to Gallery
                 </button>
-                <div className="text-gray-600">
-                    Photo #{photo.id}
-                </div>
             </div>
 
             {/* Main image container */}
@@ -78,10 +75,24 @@ export default function FullsizeImage() {
                 <div className="p-4">
                     <img
                         src={photo.photo_url}
-                        alt={`Photo ${photo.id}`}
+                        alt={photo.title || `Photo ${photo.id}`}
                         className="w-full h-auto max-h-screen object-contain rounded-lg"
                     />
                 </div>
+                {(photo.title || photo.description) && (
+                    <div className="p-6 border-t border-gray-200">
+                        {photo.title && (
+                            <h1 className="text-2xl font-bold text-gray-900 mb-3">
+                                {photo.title}
+                            </h1>
+                        )}
+                        {photo.description && (
+                            <p className="text-gray-700 leading-relaxed">
+                                {photo.description}
+                            </p>
+                        )}
+                    </div>
+                )}
             </div>
 
             {/* Action buttons */}

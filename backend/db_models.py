@@ -14,3 +14,5 @@ class DBPhoto(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     photo_name: Mapped[str] = mapped_column()
+    title: Mapped[str | None] = mapped_column(default=None)
+    description: Mapped[str | None] = mapped_column(default=None)

@@ -4,6 +4,8 @@ const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
 export type PhotoResponse = {
     id: number;
     photo_url: string;
+    title?: string;
+    description?: string;
 };
 
 // Result types for easy error checking

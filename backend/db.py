@@ -22,10 +22,10 @@ def get_photos() -> Sequence[DBPhoto]:
         return session.execute(stmt).scalars().all()
 
 
-def add_photo(photo_name: str) -> DBPhoto:
+def add_photo(photo_name: str, title: str | None = None, description: str | None = None) -> DBPhoto:
     """Add a single photo's name to the database."""
     with SessionLocal() as session:
-        new_photo = DBPhoto(photo_name=photo_name)
+        new_photo = DBPhoto(photo_name=photo_name, title=title, description=description)
         session.add(new_photo)
         session.commit()
         session.refresh(new_photo)

@@ -8,7 +8,7 @@ from config import CORS_ORIGINS
 
 from typing import ClassVar
 
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, UploadFile, Form
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict
@@ -25,6 +25,8 @@ class PhotoResponse(BaseModel):
 
     id: int
     photo_url: str | None = None
+    title: str | None = None
+    description: str | None = None
 
     model_config: ClassVar[ConfigDict] = ConfigDict(from_attributes=True)
 
@@ -42,18 +44,30 @@ app.add_middleware(
 def get_photos_endpoint() -> list[PhotoResponse]:
     """Return all photos from the database."""
     return [
-        PhotoResponse(id=photo.id, photo_url=get_url(photo.photo_name))
+        PhotoResponse(
+            id=photo.id,
+            photo_url=get_url(photo.photo_name),
+            title=photo.title,
+            description=photo.description
+        )
         for photo in db.get_photos()
     ]
 
 
 @app.post("/api/photos", response_model=PhotoResponse)
-def upload_photo_endpoint(photo: UploadFile) -> PhotoResponse:
+def upload_photo_endpoint(
+    photo: UploadFile,
+    title: str | None = Form(None),
+    description: str | None = Form(None)
+) -> PhotoResponse:
     """Upload a photo and save it to the database."""
     photo_name = upload_photo(photo)
     if photo_name is None:
         raise HTTPException(status_code=400, detail="Photo upload failed")
-    db_photo = db.add_photo(photo_name)
+    db_photo = db.add_photo(photo_name, title=title, description=description)
     return PhotoResponse(
-        id=db_photo.id, photo_url=get_url(db_photo.photo_name)
+        id=db_photo.id,
+        photo_url=get_url(db_photo.photo_name),
+        title=db_photo.title,
+        description=db_photo.description
     )

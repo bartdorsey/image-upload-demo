@@ -161,6 +161,28 @@ export default function UploadForm() {
                         )}
                     </div>
 
+                    <div className="space-y-4">
+                        <label className="block">
+                            <span className="text-gray-700 font-medium mb-2 block">Title (optional)</span>
+                            <input
+                                className="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                type="text"
+                                name="title"
+                                placeholder="Enter a title for your photo"
+                            />
+                        </label>
+
+                        <label className="block">
+                            <span className="text-gray-700 font-medium mb-2 block">Description (optional)</span>
+                            <textarea
+                                className="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+                                name="description"
+                                rows={3}
+                                placeholder="Describe your photo"
+                            />
+                        </label>
+                    </div>
+
                     <button
                         className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
                         type="submit"
