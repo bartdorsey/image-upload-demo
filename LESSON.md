@@ -105,21 +105,37 @@ After completing this tutorial, you'll understand:
 
 ## Architecture Overview
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   React Frontend│    │  FastAPI Backend│    │  MinIO Storage  │
-│                 │    │                 │    │                 │
-│ • Upload Forms  ├────┤ • File Validation   ├────┤ • Image Storage │
-│ • Photo Gallery │    │ • S3 Integration│    │ • Pre-signed URLs   │
-│ • Type Safety   │    │ • Database      │    │                 │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                                 │
-                       ┌─────────────────┐
-                       │   PostgreSQL    │
-                       │                 │
-                       │ • Photo Metadata│
-                       │ • Filenames     │
-                       └─────────────────┘
+```mermaid
+graph LR
+    subgraph Frontend["React Frontend"]
+        A["• Upload Forms<br/>• Photo Gallery<br/>• Type Safety"]
+    end
+
+    subgraph Backend["FastAPI Backend"]
+        B["• File Validation<br/>• S3 Integration<br/>• Database"]
+    end
+
+    subgraph Storage["MinIO Storage"]
+        C["• Image Storage<br/>• Pre-signed URLs"]
+    end
+
+    subgraph Database["PostgreSQL"]
+        D["• Photo Metadata<br/>• Filenames"]
+    end
+
+    Frontend <--> Backend
+    Backend <--> Storage
+    Backend <--> Database
+
+    classDef frontend fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef backend fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef storage fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef database fill:#fff3e0,stroke:#e65100,stroke-width:2px
+
+    class Frontend frontend
+    class Backend backend
+    class Storage storage
+    class Database database
 ```
 
 ---
