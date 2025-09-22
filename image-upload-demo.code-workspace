@@ -1,12 +1,15 @@
 {
 	"folders": [
 		{
+			"name": "FastAPI Backend",
 			"path": "backend"
 		},
 		{
+			"name": "Vite Frontend",
 			"path": "frontend"
 		},
 		{
+			"name": "Root Folder",
 			"path": "."
 		}
 	],
